@@ -55,10 +55,10 @@ fun HomeScreen(
         when (artUiState) {
             is ArtUiState.Loading -> LoadingScreen(modifier = Modifier.padding(contentPadding))
             is ArtUiState.Success -> ArtGrid(
-                artUiState.photos.data,
-                artUiState.photos.config.iiifUrl,
-                contentPadding,
-                modifier.weight(1f)
+                modifier = modifier.weight(1f),
+                photos =  artUiState.photos.data,
+                iiifUrl =  artUiState.photos.config.iiifUrl,
+                contentPadding = contentPadding
             )
 
             is ArtUiState.Error -> LoadingScreen()
@@ -140,10 +140,10 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun ArtGrid(
+    modifier: Modifier = Modifier,
     photos: List<ArtApiData>,
     iiifUrl: String,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(150.dp),
@@ -165,7 +165,7 @@ fun ArtGrid(
 
 @Composable
 fun Photo (photo: ArtApiData, iiifUrl: String, modifier: Modifier = Modifier) {
-    var imgSource: String = "$iiifUrl/${photo.imageId}/full/843,/0/default.jpg"
+    val imgSource = "$iiifUrl/${photo.imageId}/full/843,/0/default.jpg"
 
     Column (
         modifier = modifier.verticalScroll(rememberScrollState())
@@ -216,6 +216,6 @@ fun HomeScreenPreivew() {
                 altImageId = listOf("")
             )
         }
-        ArtGrid(mockData, "")
+        ArtGrid(photos = mockData, iiifUrl = "")
     }
 }
