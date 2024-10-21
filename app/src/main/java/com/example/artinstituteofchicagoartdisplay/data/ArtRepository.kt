@@ -4,7 +4,7 @@ import com.example.artinstituteofchicagoartdisplay.data.network.ArtApiService
 import com.example.artinstituteofchicagoartdisplay.domain.model.ArtPhoto
 
 interface ArtRepository {
-    suspend fun getArtPhotos(): ArtPhoto
+    suspend fun getArtPhotos(page: String): ArtPhoto
 }
 
 /**
@@ -14,5 +14,5 @@ class NetworkArtRepository(
     private val artApiService: ArtApiService
 ) : ArtRepository {
     /** Fetches list of Art Photos from artic.edu/api*/
-    override suspend fun getArtPhotos(): ArtPhoto = artApiService.getPhotos()
+    override suspend fun getArtPhotos(page: String): ArtPhoto = artApiService.getPhotos(page)
 }

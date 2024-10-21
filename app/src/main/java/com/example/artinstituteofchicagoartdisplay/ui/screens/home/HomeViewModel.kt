@@ -30,20 +30,46 @@ class HomeViewModel(private val artRepository: ArtRepository) : ViewModel() {
     var artUiState: ArtUiState by mutableStateOf(ArtUiState.Loading)
         private set
 
+    var currPage: Int by mutableStateOf(1)
+        private set
+
     init {
         getArtPhotos()
     }
 
-    fun getArtPhotos() {
+    fun getArtPhotos(page: String = "1") {
         viewModelScope.launch {
             artUiState = ArtUiState.Loading
             artUiState = try {
-                ArtUiState.Success(artRepository.getArtPhotos())
+                ArtUiState.Success(artRepository.getArtPhotos(page))
             } catch (e: IOException) {
                 ArtUiState.Error
             }  catch (e: HttpException) {
                 ArtUiState.Error
             }
+        }
+    }
+
+    fun nextPage() {
+        when(artUiState){
+            is ArtUiState.Success -> {
+                val totalPages = (artUiState as ArtUiState.Success).photos.pagination.totalPages
+                if (currPage < totalPages) {
+                    getArtPhotos((++currPage).toString())
+                }
+            }
+            else -> {}
+        }
+    }
+
+    fun prevPage() {
+        when(artUiState){
+            is ArtUiState.Success -> {
+                if (currPage > 1) {
+                    getArtPhotos((--currPage).toString())
+                }
+            }
+            else -> {}
         }
     }
 
@@ -56,5 +82,4 @@ class HomeViewModel(private val artRepository: ArtRepository) : ViewModel() {
             }
         }
     }
-
 }

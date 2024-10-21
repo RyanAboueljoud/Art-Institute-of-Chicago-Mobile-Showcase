@@ -35,7 +35,7 @@ class DefaultAppContainer : AppContainer {
     }
 
     /**
-     * DI implementation for Mars photos repository
+     * DI implementation for art photos repository
      */
     override val artRepository: ArtRepository by lazy {
         NetworkArtRepository(retrofitService)
